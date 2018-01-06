@@ -4,7 +4,7 @@ import filetransmission.tools.ArgParser;
 
 public class Server{
 
-	ArgParser argParser = null;
+	private static ArgParser argParser = null;
 
 	public static void main(String args[]){
 		argParser = new ArgParser(args);
@@ -12,6 +12,7 @@ public class Server{
 			System.out.println("Usage: -port <num> -speed <initial speed in KB/s>");
 			return;
 		}
+		FTServer server = new FTServer(argParser.getAsInt("port"), argParser.getAsInt("speed"));
 	}
 
 }

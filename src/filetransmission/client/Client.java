@@ -1,6 +1,6 @@
 package filetransmission.client;
 
-import filetransmission.net.FTClient;
+import filetransmission.net.PhilFTPClient;
 import filetransmission.tools.ArgParser;
 
 public class Client{
@@ -13,7 +13,7 @@ public class Client{
 			System.out.println("Usage: client -server <address> -port <num> -file <name>");
 			return;
 		}
-		FTClient client = new FTClient(argParser.get("file"));
+		new PhilFTPClient(argParser.get("server"), argParser.getAsInt("port"), argParser.get("file"));
 	}
 
 }
