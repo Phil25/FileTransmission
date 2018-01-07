@@ -26,13 +26,13 @@ public class PhilFTPClient extends Thread{
 	private InetAddress address;
 
 	public PhilFTPClient(String address, int port, String path){
-		this.port = port;
 		this.path = path;
 		Path file = Paths.get(path);
 		try{
 			this.address = InetAddress.getByName(address);
 			data = Files.readAllBytes(file);
 			in = new DatagramSocket();
+			this.port = in.getPort();
 			out = new DatagramSocket(port);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -51,20 +51,29 @@ public class PhilFTPClient extends Thread{
 	private void send(PhilFTPPacket packet){
 		byte[] buffer = packet.getBytes();
 		try{
-			out.send(new DatagramPacket(buffer, buffer.length, address, port));
+			while(true){
+				out.send(new DatagramPacket(buffer, buffer.length, address, port));
+				PhilFTPPacket ackPacket = recv(false);
+				if(packet.checkAck(ackPacket) && Checksum.check(ackPacket))
+					break;
+			}
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 	}
 
 	private PhilFTPPacket recv(){
+		return recv(true);
+	}
+
+	private PhilFTPPacket recv(boolean sendAck){
 		try{
 			byte[] header = new byte[PhilFTPHeader.HEADER_SIZE];
 			DatagramPacket packet = new DatagramPacket(header, PhilFTPHeader.HEADER_SIZE);
 			out.receive(packet);
 
 			PhilFTPHeader packetHeader = new PhilFTPHeader(packet.getData());
-			if(packetHeader.len == 0)
+			if(!sendAck || packetHeader.len == 0)
 				return new PhilFTPPacket(packetHeader, null);
 
 			byte[] body = new byte[packetHeader.len];

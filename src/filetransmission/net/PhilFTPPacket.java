@@ -7,7 +7,11 @@ public class PhilFTPPacket extends PhilFTPHeader{
 	public byte[] body;
 
 	public PhilFTPPacket(int check, int id, int type, byte[] body){
-		super(check, id, type, body.length);
+		this(check, id, type, false, body);
+	}
+
+	public PhilFTPPacket(int check, int id, int type, boolean ack, byte[] body){
+		super(check, id, type, ack, body.length);
 		this.body = body;
 	}
 
@@ -35,6 +39,10 @@ public class PhilFTPPacket extends PhilFTPHeader{
 
 	public String getString(){
 		return new String(body);
+	}
+
+	public boolean checkAck(PhilFTPPacket other){
+		return this.id == other.id && other.ack;
 	}
 
 	@Override

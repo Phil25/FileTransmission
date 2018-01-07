@@ -26,13 +26,14 @@ Running placeholder
 
 ## Packet Structure [^](#contents)
 
-byte | name | type | description
----|---|---|---
-0 | checksum | 32-bit big-endian signed integer | very simple checksum optained by suming all the values
-4 | id | 32-bit big-endian signed integer | ID to aid ordered delivery of packets
-8 | type | 8-bit big-endian signed integer | [type of the packet](#packet-types-) used
-9 | len | 32-bit big-endian signed integer | length of the `body` byte array
-13 | body | byte array | the byte array containing the file
+byte | bit | name | type | description
+---|---|---|---|---
+0 | 0 | checksum | 32-bit big-endian signed integer | very simple checksum optained by suming all the values
+4 | 32 | id | 32-bit big-endian signed integer | ID to aid ordered delivery of packets
+8 | 64 | type | 7-bit big-endian signed integer | [type of the packet](#packet-types-) used
+8 | 71 | ack | 1-bit boolean | Acknowledgement bit for confirming packet delivery
+9 | 72 | len | 32-bit big-endian signed integer | length of the `body` byte array
+13 | 104 | body | byte array | the byte array containing the file
 
 ## Packet Types [^](#contents)
 
@@ -48,7 +49,7 @@ name | value | description
 * Both client and server have two sockets open:
 	* client-\>server to send the file
 	* server-\>client to relay transfer commands
-* After sending a packet the node must receive a response in form of a packet with the same ID.
+* After sending a packet the node must receive a response in form of a packet with the same ID and `ack` bit set.
 
 1. Client sends to the server packet of `TYPE_FILE_NAME` type with name of the file as data.
 1. Server sends back `TYPE_SPEED` packet.
