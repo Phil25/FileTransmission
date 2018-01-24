@@ -1,5 +1,6 @@
 package filetransmission.server;
 
+import filetransmission.net.PhilFTPServer;
 import filetransmission.tools.ArgParser;
 
 public class Server{
@@ -12,7 +13,7 @@ public class Server{
 			System.out.println("Usage: -port <num> -speed <initial speed in KB/s>");
 			return;
 		}
-		FTServer server = new FTServer(argParser.getAsInt("port"), argParser.getAsInt("speed"));
+		new PhilFTPServer(argParser.getAsInt("port"), argParser.getAsInt("speed"));
 	}
 
 }

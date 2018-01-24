@@ -1,7 +1,8 @@
 package filetransmission.client;
 
-import filetransmission.net.PhilFTPClient;
+import filetransmission.net.philftp.PhilFTPClient;
 import filetransmission.tools.ArgParser;
+import filetransmission.tools.ByteOps;
 
 public class Client{
 

@@ -7,7 +7,7 @@
 # Contents
 * [Overview](#overview-)
 * [Running](#running-)
-* [PhilFTP Protocol](#philftp-protocol-)
+* [PhilTCP Protocol](#philtcp-protocol-)
 	* [Packet Structure](#packet-structure-)
 	* [Packet Types](#packet-types-)
 	* [Specification](#specification-)
@@ -22,20 +22,35 @@ Overview placeholder
 
 Running placeholder
 
-# PhilFTP Protocol [^](#contents)
+# PhilTCP Protocol [^](#contents)
 
-## Packet Structure [^](#contents)
+PhilTCP is used to reliably transfer packets.
+
+## PhilTCP Packet Structure [^](#contents)
 
 byte | bit | name | type | description
 ---|---|---|---|---
-0 | 0 | checksum | 32-bit big-endian signed integer | very simple checksum optained by suming all the values
-4 | 32 | id | 32-bit big-endian signed integer | ID to aid ordered delivery of packets
-8 | 64 | type | 7-bit big-endian signed integer | [type of the packet](#packet-types-) used
-8 | 71 | ack | 1-bit boolean | Acknowledgement bit for confirming packet delivery
-9 | 72 | len | 32-bit big-endian signed integer | length of the `body` byte array
-13 | 104 | body | byte array | the byte array containing the file
+0 | 0 | seq | 15-bit big-endian signed integer | sequence number of the packet
+1 | 15 | ack | 1-bit flag value | acknowledgement of correct receival
+2 | 16 | checksum | 32-bit big-endian signed integer | very simple checksum obtained by suming all the values
+6 | 48 | len | 16-bit big-endian signed integer | length of the `body` byte array
+8 | 64 | body | byte array | the byte array containing the file
 
-## Packet Types [^](#contents)
+# PhilFTP Protocol [^](#contents)
+
+PhilFTP is used for transfering files between a client and a server.
+It opens a two-way communication where one is used for sending the file from client to server and the other one for relaying commands the other way.
+Command types are defined [here](#philftp-packet-types-).
+
+## PhilFTP Packet Structure [^](#contents)
+
+byte | bit | name | type | description
+---|---|---|---|---
+0 | 0 | type | 8-bit big-endian signed integer | [type](#philftp-packet-types-) of the message
+1 | 8 | len | 32-bit flag value | length of the `body` byte array
+5 | 40 | body | byte array | the byte array containing the file
+
+## PhilFTP Packet Types [^](#contents)
 
 name | value | description
 ---|---|---
