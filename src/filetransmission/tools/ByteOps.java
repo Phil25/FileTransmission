@@ -66,8 +66,12 @@ public final class ByteOps{
 	public static byte[] concat(byte[] arr1, byte[] arr2){
 		int len = arr1.length +arr2.length;
 		byte[] bytes = new byte[len];
-		System.arraycopy(arr1, 0, bytes, 0, arr1.length);
-		System.arraycopy(arr2, 0, bytes, arr1.length, len);
+		int i = 0, j = 0;
+		while(i < arr1.length)
+			bytes[j++] = arr1[i++];
+		i = 0;
+		while(i < arr2.length)
+			bytes[j++] = arr2[i++];
 		return bytes;
 	}
 

@@ -36,12 +36,4 @@ public class PhilFTPClient extends Thread{
 	public void run(){
 	}
 
-	private PhilFTPPacket newPacket(int type, String data){
-		return null;
-	}
-
-	private PhilFTPPacket newPacket(int type, byte[] buffer){
-		return null;
-	}
-
 }

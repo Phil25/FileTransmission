@@ -3,6 +3,7 @@ package filetransmission.net.philtcp.packet;
 import java.util.Arrays;
 
 import filetransmission.tools.ByteOps;
+import filetransmission.tools.Checksum;
 
 public class PhilTCPPacket extends PhilTCPHeader{
 
@@ -23,6 +24,7 @@ public class PhilTCPPacket extends PhilTCPHeader{
 	public PhilTCPPacket(int seq, boolean ack, int check, byte[] body){
 		super(seq, ack, check, body.length);
 		this.body = Arrays.copyOfRange(body, 0, body.length);
+		this.check = Checksum.get(this);
 	}
 
 	public PhilTCPPacket(byte[] buffer){

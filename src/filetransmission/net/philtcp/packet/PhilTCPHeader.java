@@ -1,6 +1,9 @@
 package filetransmission.net.philtcp.packet;
 
+import java.util.Arrays;
+
 import filetransmission.tools.ByteOps;
+import filetransmission.tools.Checksum;
 
 public class PhilTCPHeader{
 
@@ -36,10 +39,10 @@ public class PhilTCPHeader{
 
 	public byte[] getBytes(){
 		byte[] buffer = new byte[HEADER_SIZE];
-		ByteOps.get7Bits(buffer, 0);
-		ByteOps.getLastBit(buffer, 1);
-		ByteOps.toInt32(buffer, 2);
-		ByteOps.get16Bits(buffer, 6);
+		ByteOps.set15Bits(buffer, 0, seq);
+		ByteOps.setLastBit(buffer, 1, ack);
+		ByteOps.intToBytes(buffer, 2, check);
+		ByteOps.set16Bits(buffer, 6, len);
 		return buffer;
 	}
 

@@ -32,7 +32,7 @@ byte | bit | name | type | description
 ---|---|---|---|---
 0 | 0 | seq | 15-bit big-endian signed integer | sequence number of the packet
 1 | 15 | ack | 1-bit flag value | acknowledgement of correct receival
-2 | 16 | checksum | 32-bit big-endian signed integer | very simple checksum obtained by suming all the values
+2 | 16 | checksum | 32-bit big-endian signed integer | very simple checksum obtained by some random algorithm I made up
 6 | 48 | len | 16-bit big-endian signed integer | length of the `body` byte array
 8 | 64 | body | byte array | the byte array containing the file
 
@@ -47,7 +47,7 @@ Command types are defined [here](#philftp-packet-types-).
 byte | bit | name | type | description
 ---|---|---|---|---
 0 | 0 | type | 8-bit big-endian signed integer | [type](#philftp-packet-types-) of the message
-1 | 8 | len | 32-bit flag value | length of the `body` byte array
+1 | 8 | len | 32-bit big-endian signed integer | length of the `body` byte array
 5 | 40 | body | byte array | the byte array containing the file
 
 ## PhilFTP Packet Types [^](#contents)
