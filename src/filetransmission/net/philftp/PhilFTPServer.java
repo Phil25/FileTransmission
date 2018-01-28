@@ -20,19 +20,26 @@ public class PhilFTPServer extends Thread{
 	public PhilFTPServer(int port, int speed) throws SocketException{
 		this.speed = speed;
 		this.server = new PhilTCPServer(port);
-		try{
-			this.stream = new FileOutputStream(new File("test.pdf"));
-			this.start();
-		}catch(FileNotFoundException e){}
+		this.stream = null;
+		this.start();
 	}
 
 	@Override
 	public void run(){
 		try{
+			PhilTCPPacket packet = null;
 			while(true){
-				PhilTCPPacket packet = server.recv();
-				if(packet != null)
-					stream.write(packet.body);
+				packet = server.recv();
+				if(packet == null)
+					continue;
+				if(stream == null){
+					try{
+						stream = new FileOutputStream(new File("incoming/" + packet.getString()));
+					}catch(FileNotFoundException e){
+						e.printStackTrace();
+						break;
+					}
+				}else stream.write(packet.body);
 			}
 		}catch(IOException e){}
 	}

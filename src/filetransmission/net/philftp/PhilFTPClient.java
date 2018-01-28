@@ -17,6 +17,7 @@ public class PhilFTPClient extends Thread{
 	private PhilTCPClient client;
 
 	public PhilFTPClient(String address, int port, String path){
+		this.path = path;
 		Path file = Paths.get(path);
 		try{
 			this.address = InetAddress.getByName(address);
@@ -29,6 +30,7 @@ public class PhilFTPClient extends Thread{
 	@Override
 	public void run(){
 		try{
+			client.send(path);
 			client.send(data);
 		}catch(IOException e){}
 	}
