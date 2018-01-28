@@ -21,35 +21,23 @@ public class PhilTCPServer{
 	private final int port;
 	private DatagramSocket sock;
 
-	public PhilTCPServer(int port){
+	public PhilTCPServer(int port) throws SocketException{
 		this.port = port;
-		try{
-			this.sock = new DatagramSocket(port);
-			System.out.println("Created PhilTCPServer on port " + sock.getLocalPort());
-			recv();
-		}catch(SocketException e){
-		}catch(IOException e){}
-	}
-
-	public PhilTCPServer(){
-		try{
-			this.sock = new DatagramSocket();
-		}catch(SocketException e){}
-		this.port = this.sock.getLocalPort();
+		this.sock = new DatagramSocket(port);
 		System.out.println("Created PhilTCPServer on port " + sock.getLocalPort());
-		try{
-			recv();
-		}catch(IOException e){}
 	}
 
-	synchronized private void recv() throws IOException{
-		while(true){
-			PhilTCPPacket packet = recvPacket();
-			boolean check = Checksum.check(packet);
-			respond(packet.seq, check);
-			if(check)
-				System.out.println("\"" + packet.getString() + "\"");
-		}
+	public PhilTCPServer() throws SocketException{
+		this.sock = new DatagramSocket();
+		this.port = this.sock.getLocalPort();
+		System.out.println("Created PhilTCPServer on port " + this.port);
+	}
+
+	synchronized public PhilTCPPacket recv() throws IOException{
+		PhilTCPPacket packet = recvPacket();
+		boolean check = Checksum.check(packet);
+		respond(packet.seq, check);
+		return check ? packet : null;
 	}
 
 	synchronized private PhilTCPPacket recvPacket() throws IOException{

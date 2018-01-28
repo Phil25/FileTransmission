@@ -1,7 +1,8 @@
 package filetransmission.server;
 
+import java.net.SocketException;
+
 import filetransmission.net.PhilFTPServer;
-import filetransmission.net.philtcp.PhilTCPServer;
 import filetransmission.tools.ArgParser;
 
 public class Server{
@@ -14,9 +15,11 @@ public class Server{
 			System.out.println("Usage: -port <num> -speed <initial speed in KB/s>");
 			return;
 		}
-		//new PhilFTPServer(argParser.getAsInt("port"), argParser.getAsInt("speed"));
-		int port = argParser.getAsInt("port");
-		new PhilTCPServer(port);
+		try{
+			new PhilFTPServer(argParser.getAsInt("port"), argParser.getAsInt("speed"));
+		}catch(SocketException e){
+			e.printStackTrace();
+		}
 	}
 
 }
